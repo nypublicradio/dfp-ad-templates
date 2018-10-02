@@ -3,15 +3,14 @@ import CloseButton from '../CloseButton';
 import {h, render, Component} from 'preact';
 
 class SplashOverlay extends Component {
-  constructor() {
-    super();
-    this.state.showSplash = true;
-    this.state.imageUrl =
+  state = {
+    showSplash: true,
+    imageUrl:
       window.innerWidth >= 800
-        ? window.dfp.imageUrlDesktop
-        : window.dfp.imageUrlMobile;
-    this.state.clickthroughUrl = window.dfp.clickthroughUrl;
-  }
+        ? window.DFP.imageUrlDesktop
+        : window.DFP.imageUrlMobile,
+    clickthroughUrl: window.DFP.clickthroughUrl,
+  };
 
   dismissSplash() {
     this.setState({showSplash: false});
