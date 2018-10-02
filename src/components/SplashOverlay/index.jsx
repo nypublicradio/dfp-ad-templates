@@ -19,9 +19,15 @@ class SplashOverlay extends Component {
   render() {
     return this.state.showSplash ? (
       <div class={styles.splashOverlay} onClick={this.dismissSplash.bind(this)}>
-        <a href={this.state.clickthroughUrl} target="_blank">
-          <img src={this.state.imageUrl} />
-        </a>
+        <div style="position: relative;">
+          <CloseButton
+            buttonColor="#000"
+            clickAction={this.dismissSplash.bind(this)}
+          />
+          <a href={this.state.clickthroughUrl} target="_blank">
+            <img src={this.state.imageUrl} />
+          </a>
+        </div>
       </div>
     ) : null;
   }
