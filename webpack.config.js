@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const CompressionPlugin = require('compression-webpack-plugin');
 
 module.exports = {
   entry: './src/index.js',
@@ -39,5 +40,12 @@ module.exports = {
       template: './src/index.html',
       filename: './index.html',
     }),
+    new CompressionPlugin(),
+
+    // // Uncomment this plugin to analyze the bundle size; our goal is to keep
+    // // this bundle as small as possible.
+    // new BundleAnalyzerPlugin({
+    //   analyzerHost: '0.0.0.0'
+    // }),
   ]
 };
