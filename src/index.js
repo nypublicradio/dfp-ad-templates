@@ -1,10 +1,10 @@
 import {h, render, Component} from 'preact';
-import SplashPage from './components/SplashOverlay/index.jsx';
+import SplashOverlay from './components/SplashOverlay/index.jsx';
 
 class Index extends Component {
   render() {
-    return <SplashPage />;
+    return <SplashOverlay />;
   }
 }
 
-render(<Index />, document.body);
+render(<Index />, document.querySelector('#dfp_splash_app'));
