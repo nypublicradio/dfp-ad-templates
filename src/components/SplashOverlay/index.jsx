@@ -1,4 +1,5 @@
 import styles from './SplashOverlay.scss';
+import CloseButton from '../CloseButton';
 import {h, render, Component} from 'preact';
 
 class SplashOverlay extends Component {

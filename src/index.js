@@ -1,5 +1,5 @@
 import {h, render, Component} from 'preact';
-import SplashOverlay from './components/SplashOverlay/index.jsx';
+import SplashOverlay from './components/SplashOverlay';
 
 class Index extends Component {
   render() {
