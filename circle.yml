@@ -57,7 +57,7 @@ jobs:
 
       - run:
           name: Deploy to staging
-          command: true
+          command: aws s3 cp /tmp/dist/bundle.js.gz s3://${DEMO_AWS_BUCKET}/bundle.js --region ${DEMO_AWS_REGION} --acl public-read --cache-control max-age=0 --content-type "application/javascript" --content-encoding "gzip"
 
   deploy_production:
     <<: *defaults
@@ -70,7 +70,7 @@ jobs:
 
       - run:
           name: Deploy to staging
-          command: true
+          command: aws s3 cp /tmp/dist/bundle.js.gz s3://${PROD_AWS_BUCKET}/bundle.js --region ${PROD_AWS_REGION} --acl public-read --cache-control max-age=0 --content-type "application/javascript" --content-encoding "gzip"
 
 
 
