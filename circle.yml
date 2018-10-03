@@ -1,0 +1,98 @@
+version: 2
+
+defaults: &defaults
+  docker:
+    - image: circleci/node:8-browsers
+      environment:
+        JOBS: 2
+
+node_key: &node_key
+  key: node-deps-v1-{{ arch }}-{{ checksum "yarn.lock" }}-{{ checksum "circle.yml" }}
+
+restore_node: &restore_node
+  restore_cache:
+    <<: *node_key
+
+save_bundle_to_workspace: &save_bundle_to_workspace
+  persist_to_workspace:
+    root: dist
+    paths:
+      - bundle.js.gz
+
+attach_workspace_bundle: &attach_workspace_bundle
+  attach_workspace:
+    at: /tmp/dist/
+
+jobs:
+  build:
+    <<: *defaults
+
+    steps:
+      - checkout
+
+      - <<: *restore_node
+      - run:
+          name: Node dependencies
+          command: |
+            if [ ! -d node_modules ]; then
+              yarn --pure-lockfile
+            fi
+      - save_cache:
+          <<: *node_key
+          paths:
+            - node_modules
+      - run:
+          name: Build bundle
+          command: npx webpack -p
+      - <<: *save_bundle_to_workspace
+
+  deploy_demo:
+    <<: *defaults
+    environment:
+      ENV: demo
+
+    steps:
+      - checkout
+      - <<: *attach_workspace_bundle
+
+      - run:
+          name: Deploy to staging
+          command: true
+
+  deploy_production:
+    <<: *defaults
+    environment:
+      ENV: prod
+
+    steps:
+      - checkout
+      - <<: *attach_workspace_bundle
+
+      - run:
+          name: Deploy to staging
+          command: true
+
+
+
+workflows:
+  version: 2
+  install-test-deploy:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+      - deploy_production:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /^v[0-9]+\.[0-9]+\.[0-9]+/
+            branches:
+              ignore: /.*/
+      - deploy_demo:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
