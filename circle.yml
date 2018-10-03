@@ -15,7 +15,7 @@ defaults_python: &defaults_python
 install_awscli: &install_awscli
   run:
     name: Install awscli
-    command: aws s3 cp /tmp/dist/bundle.js.gz s3://${DEMO_AWS_BUCKET}/dfp-ad-templates/bundle.js --region ${DEMO_AWS_REGION} --acl public-read --cache-control max-age=0 --content-type "application/javascript" --content-encoding "gzip"
+    command: pip install awscli
 
 node_key: &node_key
   key: node-deps-v1-{{ arch }}-{{ checksum "yarn.lock" }}-{{ checksum "circle.yml" }}
