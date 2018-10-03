@@ -1,8 +1,14 @@
 version: 2
 
-defaults: &defaults
+defaults: &defaults-node
   docker:
     - image: circleci/node:8-browsers
+      environment:
+        JOBS: 2
+
+defaults: &defaults-python
+  docker:
+    - image: circleci/python
       environment:
         JOBS: 2
 
@@ -25,7 +31,7 @@ attach_workspace_bundle: &attach_workspace_bundle
 
 jobs:
   build:
-    <<: *defaults
+    <<: *defaults-node
 
     steps:
       - checkout
@@ -47,7 +53,7 @@ jobs:
       - <<: *save_bundle_to_workspace
 
   deploy_demo:
-    <<: *defaults
+    <<: *defaults-python
     environment:
       ENV: demo
 
@@ -60,7 +66,7 @@ jobs:
           command: aws s3 cp /tmp/dist/bundle.js.gz s3://${DEMO_AWS_BUCKET}/dfp-ad-templates/bundle.js --region ${DEMO_AWS_REGION} --acl public-read --cache-control max-age=0 --content-type "application/javascript" --content-encoding "gzip"
 
   deploy_production:
-    <<: *defaults
+    <<: *defaults-python
     environment:
       ENV: prod
 
