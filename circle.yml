@@ -1,16 +1,21 @@
 version: 2
 
-defaults: &defaults-node
+defaults-node: &defaults-node
   docker:
     - image: circleci/node:8-browsers
       environment:
         JOBS: 2
 
-defaults: &defaults-python
+defaults-python: &defaults-python
   docker:
     - image: circleci/python
       environment:
         JOBS: 2
+
+install-awscli: &install-awscli
+  run:
+    name: Install awscli
+    command: aws s3 cp /tmp/dist/bundle.js.gz s3://${DEMO_AWS_BUCKET}/dfp-ad-templates/bundle.js --region ${DEMO_AWS_REGION} --acl public-read --cache-control max-age=0 --content-type "application/javascript" --content-encoding "gzip"
 
 node_key: &node_key
   key: node-deps-v1-{{ arch }}-{{ checksum "yarn.lock" }}-{{ checksum "circle.yml" }}
@@ -54,6 +59,8 @@ jobs:
 
   deploy_demo:
     <<: *defaults-python
+    <<: *install-awscli
+
     environment:
       ENV: demo
 
@@ -67,6 +74,8 @@ jobs:
 
   deploy_production:
     <<: *defaults-python
+    <<: *install-awscli
+
     environment:
       ENV: prod
 
