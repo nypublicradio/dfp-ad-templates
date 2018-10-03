@@ -1,4 +1,5 @@
 .splashOverlay {
+  box-sizing: border-box;
   position: fixed;
   top: 0;
   left: 0;
@@ -8,14 +9,25 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
+  *, *:after, *:before {
+    box-sizing: border-box;
+  }
+}
+
+.splashOverlayContainer {
+  position: relative;
+  background-color: white;
 }
 
 .splashImgDesktop {
   width: 800px;
   height: 600px;
+  float: left;
 }
 
 .splashImgMobile {
   width: 240px;
   height: 400px;
+  float: left;
 }
