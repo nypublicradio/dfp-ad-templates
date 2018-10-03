@@ -15,7 +15,7 @@ defaults_python: &defaults_python
 install_awscli: &install_awscli
   run:
     name: Install awscli
-    command: pip install --user awscli && PATH=$HOME/.local/bin:$PATH
+    command: sudo pip install awscli
 
 node_key: &node_key
   key: node-deps-v1-{{ arch }}-{{ checksum "yarn.lock" }}-{{ checksum "circle.yml" }}
