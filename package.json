@@ -1,8 +1,8 @@
 {
-  "name": "dfp-templates",
+  "name": "dfp-ad-templates",
   "version": "0.0.1",
   "main": "index.js",
-  "repository": "git@github.com:nypublicradio/dfp-templates.git",
+  "repository": "git@github.com:nypublicradio/dfp-ad-templates.git",
   "author": "",
   "license": "MIT",
   "devDependencies": {
