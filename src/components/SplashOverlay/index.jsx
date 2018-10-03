@@ -5,12 +5,15 @@ import {h, render, Component} from 'preact';
 class SplashOverlay extends Component {
   state = {
     showSplash: true,
-    imageUrl:
-      window.innerWidth >= 800
-        ? window.DFP.imageUrlDesktop
-        : window.DFP.imageUrlMobile,
+    imageUrl: this.isDesktop()
+      ? window.DFP.imageUrlDesktop
+      : window.DFP.imageUrlMobile,
     clickthroughUrl: window.DFP.clickthroughUrl,
   };
+
+  isDesktop() {
+    return window.innerWidth >= 840;
+  }
 
   dismissSplash() {
     this.setState({showSplash: false});
@@ -25,7 +28,14 @@ class SplashOverlay extends Component {
             clickAction={this.dismissSplash.bind(this)}
           />
           <a href={this.state.clickthroughUrl} target="_blank">
-            <img src={this.state.imageUrl} />
+            <img
+              src={this.state.imageUrl}
+              class={
+                this.isDesktop()
+                  ? styles.splashImgDesktop
+                  : styles.splashImgMobile
+              }
+            />
           </a>
         </div>
       </div>
