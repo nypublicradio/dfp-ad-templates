@@ -3,6 +3,8 @@ import findHighestZIndex from '../../utils/findHighestZIndex';
 import CloseButton from '../CloseButton';
 import {h, render, Component} from 'preact';
 
+const ESCAPE_KEY = 27;
+
 class SplashOverlay extends Component {
   state = {
     showSplash: true,
@@ -12,8 +14,18 @@ class SplashOverlay extends Component {
     clickthroughUrl: window.DFP.clickthroughUrl,
   };
 
-  isDesktop() {
-    return window.innerWidth >= 840;
+  _handleKeyDown() {
+    switch( event.keyCode ) {
+      case ESCAPE_KEY:
+        this.dismissSplash();
+        break;
+      default:
+        break;
+    }
+  }
+
+  componentWillMount() {
+    document.addEventListener('keydown', this._handleKeyDown.bind(this));
   }
 
   dismissSplash() {
