@@ -65,8 +65,8 @@ jobs:
 
     steps:
       - checkout
-      - <<: *install_awscli
       - <<: *attach_workspace_bundle
+      - <<: *install_awscli
 
       - run:
           name: Deploy to demo
@@ -74,15 +74,14 @@ jobs:
 
   deploy_production:
     <<: *defaults_python
-    <<: *install_awscli
 
     environment:
       ENV: prod
 
     steps:
       - checkout
-      - <<: *install_awscli
       - <<: *attach_workspace_bundle
+      - <<: *install_awscli
 
       - run:
           name: Deploy to production
