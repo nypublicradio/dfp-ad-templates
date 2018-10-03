@@ -1,58 +1,63 @@
-import styles from './SplashOverlay.scss';
-import findHighestZIndex from '../../utils/findHighestZIndex';
 import CloseButton from '../CloseButton';
+import Cookies from 'js-cookie';
+import findHighestZIndex from '../../utils/findHighestZIndex';
+import styles from './SplashOverlay.scss';
 import {h, render, Component} from 'preact';
 
 const ESCAPE_KEY = 27;
 
 class SplashOverlay extends Component {
   state = {
-    showSplash: true,
-    imageUrl: this.isDesktop()
+    showSplash: this._shouldShowSplash(),
+    imageUrl: this._isDesktop()
       ? window.DFP.imageUrlDesktop
       : window.DFP.imageUrlMobile,
     clickthroughUrl: window.DFP.clickthroughUrl,
   };
 
+  _dismissSplash() {
+    this.setState({showSplash: false});
+    Cookies.set('hasSeenSplash', 'true', { expires: 1, path: '/' });
+    document.removeEventListener('keydown', this._handleKeyDown.bind(this));
+  }
+
   _handleKeyDown() {
     switch( event.keyCode ) {
       case ESCAPE_KEY:
-        this.dismissSplash();
+        this._dismissSplash();
         break;
       default:
         break;
     }
   }
 
-  componentWillMount() {
-    document.addEventListener('keydown', this._handleKeyDown.bind(this));
-  }
-
-  dismissSplash() {
-    this.setState({showSplash: false});
-    document.removeEventListener('keydown', this._handleKeyDown.bind(this));
-  }
-
-  isDesktop() {
+  _isDesktop() {
     return window.innerWidth >= 840;
+  }
+
+  _shouldShowSplash() {
+    if (!Cookies.get('hasSeenSplash')) {
+      document.addEventListener('keydown', this._handleKeyDown.bind(this));
+      return true;
+    }
   }
 
   render() {
     return this.state.showSplash ? (
       <div
         class={styles.splashOverlay}
-        onClick={this.dismissSplash.bind(this)}
+        onClick={this._dismissSplash.bind(this)}
         style={`z-index: ${findHighestZIndex(document.querySelector('body'))}`}>
         <div style="position: relative;">
           <CloseButton
             buttonColor="#000"
-            clickAction={this.dismissSplash.bind(this)}
+            clickAction={this._dismissSplash.bind(this)}
           />
           <a href={this.state.clickthroughUrl} target="_blank">
             <img
               src={this.state.imageUrl}
               class={
-                this.isDesktop()
+                this._isDesktop()
                   ? styles.splashImgDesktop
                   : styles.splashImgMobile
               }
