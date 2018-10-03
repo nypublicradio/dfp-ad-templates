@@ -1,4 +1,5 @@
 import styles from './SplashOverlay.scss';
+import findHighestZIndex from '../../utils/findHighestZIndex';
 import CloseButton from '../CloseButton';
 import {h, render, Component} from 'preact';
 
@@ -17,11 +18,19 @@ class SplashOverlay extends Component {
 
   dismissSplash() {
     this.setState({showSplash: false});
+    document.removeEventListener('keydown', this._handleKeyDown.bind(this));
+  }
+
+  isDesktop() {
+    return window.innerWidth >= 840;
   }
 
   render() {
     return this.state.showSplash ? (
-      <div class={styles.splashOverlay} onClick={this.dismissSplash.bind(this)}>
+      <div
+        class={styles.splashOverlay}
+        onClick={this.dismissSplash.bind(this)}
+        style={`z-index: ${findHighestZIndex(document.querySelector('body'))}`}>
         <div style="position: relative;">
           <CloseButton
             buttonColor="#000"
