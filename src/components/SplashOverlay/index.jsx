@@ -7,6 +7,33 @@ import {h, render, Component} from 'preact';
 const ESCAPE_KEY = 27;
 
 class SplashOverlay extends Component {
+  _dismissSplash = () => {
+    this.setState({showSplash: false});
+    Cookies.set('hasSeenSplash', 'true', {expires: 1, path: '/'});
+    document.removeEventListener('keydown', this._handleKeyDown);
+  };
+
+  _handleKeyDown = (event) => {
+    switch (event.keyCode) {
+      case ESCAPE_KEY:
+        this._dismissSplash();
+        break;
+      default:
+        break;
+    }
+  };
+
+  _isDesktop = () => {
+    return window.innerWidth >= 840;
+  };
+
+  _shouldShowSplash = () => {
+    if (!Cookies.get('hasSeenSplash')) {
+      document.addEventListener('keydown', this._handleKeyDown);
+      return true;
+    }
+  };
+
   state = {
     showSplash: this._shouldShowSplash(),
     imageUrl: this._isDesktop()
@@ -15,44 +42,14 @@ class SplashOverlay extends Component {
     clickthroughUrl: window.DFP.clickthroughUrl,
   };
 
-  _dismissSplash() {
-    this.setState({showSplash: false});
-    Cookies.set('hasSeenSplash', 'true', { expires: 1, path: '/' });
-    document.removeEventListener('keydown', this._handleKeyDown.bind(this));
-  }
-
-  _handleKeyDown() {
-    switch( event.keyCode ) {
-      case ESCAPE_KEY:
-        this._dismissSplash();
-        break;
-      default:
-        break;
-    }
-  }
-
-  _isDesktop() {
-    return window.innerWidth >= 840;
-  }
-
-  _shouldShowSplash() {
-    if (!Cookies.get('hasSeenSplash')) {
-      document.addEventListener('keydown', this._handleKeyDown.bind(this));
-      return true;
-    }
-  }
-
   render() {
     return this.state.showSplash ? (
       <div
         class={styles.splashOverlay}
-        onClick={this._dismissSplash.bind(this)}
+        onClick={this._dismissSplash}
         style="z-index: 10000">
         <div class={styles.splashOverlayContainer}>
-          <CloseButton
-            buttonColor="#000"
-            clickAction={this._dismissSplash.bind(this)}
-          />
+          <CloseButton buttonColor="#000" clickAction={this._dismissSplash} />
           <a href={this.state.clickthroughUrl} target="_blank">
             <img
               src={this.state.imageUrl}
