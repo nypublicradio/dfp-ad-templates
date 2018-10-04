@@ -47,7 +47,7 @@ class SplashOverlay extends Component {
       <div
         class={styles.splashOverlay}
         onClick={this._dismissSplash.bind(this)}
-        style={`z-index: ${findHighestZIndex()}`}>
+        style="z-index: 10000">
         <div class={styles.splashOverlayContainer}>
           <CloseButton
             buttonColor="#000"
