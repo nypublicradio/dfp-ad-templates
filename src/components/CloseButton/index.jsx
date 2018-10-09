@@ -9,6 +9,7 @@ export default ({clickAction, buttonColor}) => (
     fill="none"
     class={styles.closeButton}
     onClick={clickAction}
+    data-cy="close-button"
     xmlns="http://www.w3.org/2000/svg">
     <g filter="url(#filter0_d)">
       <path

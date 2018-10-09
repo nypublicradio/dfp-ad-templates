@@ -13,7 +13,7 @@ class SplashOverlay extends Component {
     document.removeEventListener('keydown', this._handleKeyDown);
   };
 
-  _handleKeyDown = (event) => {
+  _handleKeyDown = event => {
     switch (event.keyCode) {
       case ESCAPE_KEY:
         this._dismissSplash();
@@ -47,12 +47,17 @@ class SplashOverlay extends Component {
       <div
         class={styles.splashOverlay}
         onClick={this._dismissSplash}
-        style="z-index: 10000">
+        style="z-index: 10000"
+        data-cy="splash-background">
         <div class={styles.splashOverlayContainer}>
           <CloseButton buttonColor="#000" clickAction={this._dismissSplash} />
-          <a href={this.state.clickthroughUrl} target="_blank">
+          <a
+            href={this.state.clickthroughUrl}
+            target="_blank"
+            data-cy="splash-link">
             <img
               src={this.state.imageUrl}
+              data-cy="splash-img"
               class={
                 this._isDesktop()
                   ? styles.splashImgDesktop
