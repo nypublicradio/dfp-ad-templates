@@ -42,6 +42,14 @@ module.exports = {
       template: './src/index.html',
       filename: './index.html',
     }),
+    new HtmlWebpackPlugin({
+      template: './src/desktop-and-mobile-splash.html',
+      filename: './desktop-and-mobile-splash.html',
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/desktop-splash-mobile-inset.html',
+      filename: './desktop-splash-mobile-inset.html',
+    }),
     new CompressionPlugin(),
 
     // // Uncomment this plugin to analyze the bundle size; our goal is to keep
