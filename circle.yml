@@ -1,38 +1,40 @@
 version: 2
 
-defaults_node: &defaults_node
-  docker:
-    - image: circleci/node:8-browsers
-      environment:
-        JOBS: 2
+vars:
+  defaults_node: &defaults_node
+    docker:
+      - image: circleci/node:8-browsers
+        environment:
+          JOBS: 2
 
-defaults_python: &defaults_python
-  docker:
-    - image: circleci/python
-      environment:
-        JOBS: 2
+  defaults_python: &defaults_python
+    docker:
+      - image: circleci/python
+        environment:
+          JOBS: 2
 
-install_awscli: &install_awscli
-  run:
-    name: Install awscli
-    command: sudo pip install awscli
+  install_awscli: &install_awscli
+    run:
+      name: Install awscli
+      command: sudo pip install awscli
 
-node_key: &node_key
-  key: node-deps-v1-{{ arch }}-{{ checksum "yarn.lock" }}-{{ checksum "circle.yml" }}
+  node_key: &node_key
+    key: node-deps-v1-{{ arch }}-{{ checksum "yarn.lock" }}-{{ checksum "circle.yml" }}
 
-restore_node: &restore_node
-  restore_cache:
-    <<: *node_key
+  restore_node: &restore_node
+    restore_cache:
+      <<: *node_key
 
-save_bundle_to_workspace: &save_bundle_to_workspace
-  persist_to_workspace:
-    root: dist
-    paths:
-      - bundle.js.gz
+  save_bundle_to_workspace: &save_bundle_to_workspace
+    persist_to_workspace:
+      root: dist
+      paths:
+        - bundle.js.gz
 
-attach_workspace_bundle: &attach_workspace_bundle
-  attach_workspace:
-    at: /tmp/dist/
+  attach_workspace_bundle: &attach_workspace_bundle
+    attach_workspace:
+      at: /tmp/dist/
+
 
 jobs:
   build:
@@ -86,7 +88,6 @@ jobs:
       - run:
           name: Deploy to production
           command: aws s3 cp /tmp/dist/bundle.js.gz s3://${PROD_AWS_BUCKET}/dfp-ad-templates/bundle.js --region ${PROD_AWS_REGION} --acl public-read --cache-control max-age=0 --content-type "application/javascript" --content-encoding "gzip"
-
 
 
 workflows:
