@@ -5,6 +5,10 @@
   "repository": "git@github.com:nypublicradio/dfp-ad-templates.git",
   "author": "",
   "license": "MIT",
+  "scripts": {
+    "build": "webpack",
+    "serve": "webpack-dev-server -w --disable-host-check --host=0.0.0.0 --mode development --open --hot --history-api-fallback"
+  },
   "devDependencies": {
     "@babel/core": "^7.1.2",
     "@babel/plugin-proposal-class-properties": "^7.1.0",
