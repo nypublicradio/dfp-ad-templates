@@ -53,7 +53,31 @@ This particular inset uses a 400x240 image and has a background color for
 widths lower than 840px but higher than 400px, where the background behind the
 image will be visible.
 
-## Components
+## Implementation With DFP
 
-The `/src/components` directory contains the building blocks for the various
-templates; all React (or Preact) components should go here.
+These DFP templates are used with "Creative Templates" in DFP, which are found
+in `Delivery -> Creatives -> Creative Templates`.
+
+To pull in a template, you need three things:
+
+* The required variables for the template you're using (contained within a
+	`script`)
+* A div with an ID of `dfp_splash_app` that the bundle code will be injected
+	into.
+* A `script` tag pulling in the js bundle this repo produces
+
+As an example, here is the current Creative Template code for the `Desktop and
+Mobile Splash` template:
+
+```
+<script type="text/javascript">
+  window.DFP = {};
+  window.DFP.imageUrlDesktop = "[%DesktopImage%]";
+  window.DFP.imageUrlMobile  = "[%MobileImage%]";
+  window.DFP.clickthroughUrl = "%%CLICK_URL_ESC%%[%ClickthroughURL%]";
+  window.DFP.templateName    = "desktop-splash-mobile-inset";
+</script>
+
+<div id="dfp_splash_app"></div>
+<script src="https://demo-static.nypr.org/dfp-ad-templates/bundle.js" type="text/javascript" defer></script>
+```
